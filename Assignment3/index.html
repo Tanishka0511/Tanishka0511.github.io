@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registation Form</title>
+</head>
+<body>
+    <h1>Registation Form</h1>
+    <form action="Thanku.html" >
+        <div><label for="username">Name: </label>
+        <input type="text" id="username" name="username"  required autofocus pattern="[a-zA-Z0-9]+">
+        </div>
+        <br>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+        </div>
+        <br>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" >
+        </div>
+        <br>
+
+        <div>
+        Gender :
+        <input type="radio" name="gender" id="male" value="male">
+            <label for="male">Male</label>
+           
+            
+            <input type="radio" name="gender" id="female" value="female">
+            <label for="female">Female</label>
+           
+            <input type="radio" name="gender" id="female" value="Other">
+            <label for="Other">Other</label>
+        </div>
+<br>
+        <div>
+            Hobbies:
+            <br>
+            
+            <input type="checkbox" name="Reading" id="Reading" value="Reading">
+            <label for="Reading">Reading</label>
+           <br>
+            <input type="checkbox" name="Travelling" id="Travelling" value="Travelling">
+            <label for="Travelling">Travelling</label>
+
+            <br>
+            <input type="checkbox" name="Cooking" id="Cooking" value="Cooking">
+            <label for="Writing">Cooking</label>
+           <br> 
+            <input type="checkbox" name="Sports" id="Sports" value="Sports">
+            <label for="Sports">Sports</label>
+            
+        </div>
+<br>
+        <div>
+            City:
+            <select name="city"  >
+                <option value="Select your city">Select your city</option>
+                <option value="Ghaziabad">Ghaziabad</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Noida">Noida</option>
+                <option value="Meerut">Meerut</option>
+                <option value="Mumbai">Mumbai</option>
+            </select>
+        </div>
+
+        <br>
+        <div>
+            <label for="date">Date of Birth:</label>
+            <input type="date">
+        </div>
+        <br>
+     
+        <div>
+            <label for="Phone Number">Phone Number:</label>
+            <input type="tel" name="Phone Number" id="Phone Number" placeholder="10-digit number">
+        </div>
+       
+        <br>
+        <div>
+            <label for="comment">Address:</label>
+            <br>
+            <textarea name="comment" rows="4" cols="50" placeholder="Enter your address here...">
+        
+            </textarea>
+        </div>
+        <br>
+        <div>
+           
+            <input type="submit" id="submit" value="Submit">
+        </div>
+      
+    </form>
+</body>
+</html>
