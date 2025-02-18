@@ -17,5 +17,6 @@ a[7]="wrong"
 console.log(a);    //adding holes in array
 
 //incorrect syntax for deleletion
-delete a[0];
+delete a[0];      //leaves hole at that place 
 console.log(a)
+

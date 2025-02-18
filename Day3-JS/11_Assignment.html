@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment</title>
+</head>
+<body>
+  <h5>
+    Question:
+  </h5>
+<p>
+  Take a username,no. of subjects,and subject name with marks from input and print percentage ,maximum marks and grade according to percentage in console..... 
+</p>
+    
+  
+    <script>
+      const username = prompt("Give name of student")
+
+console.log(username)
+
+const noOfsubject = prompt("Give number of subject")
+console.log(noOfsubject)
+
+let arr= []
+
+for(let i = 1 ; i <= noOfsubject ; i++){
+    const subName = prompt("Enter subject name")
+    const subNo = prompt("Enter no")
+
+    arr.push([subName , subNo])
+}
+
+let sum = 0
+let maxi = -1
+
+
+for(let i = 0 ; i < arr.length ; i++){
+    sum += parseInt(arr[i][1]) 
+    if (maxi < arr[i][1]){
+        maxi = arr[i][1]
+    }
+}
+
+const percentage = sum/noOfsubject
+
+console.log(`Percentage is ${percentage}`)
+console.log(`Highest marks is ${maxi}`)
+
+if(percentage >= 90){
+    console.log("A+")
+}
+else if (percentage >= 80 && percentage < 90){
+    console.log("A")
+}
+else{
+    console.log("B")
+}
+
+
+    </script>
+</body>
+</html>

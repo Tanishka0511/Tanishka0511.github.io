@@ -12,3 +12,6 @@ for(let i of arr){
     //values :: only works iterables
     console.log(i)
 }
+
+
+//while or do while loop
