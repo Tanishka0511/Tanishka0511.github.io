@@ -5864,54 +5864,165 @@ const dummyData = [
     },
 ];
 
-const root = document.querySelector("main");
+// const root = document.querySelector("main");
 
+// const showUI = (list) => {
+//     root.innerHTML = ""; 
+//     list.forEach((obj, idx) => {
+//         const newCard = document.createElement("div");
+//         newCard.addEventListener("click", () => {
+//             window.open(`./video.html?id=${obj.videoId}`, "_top");
+//         });
+//         newCard.className = "card";
+//         newCard.innerHTML = `
+//             <img 
+//                 src='${obj.videoThumbnails[0].url}' 
+//                 width="100%" 
+//                 onmouseover='handleHover(event, ${idx})'
+//             >
+//             <h6>${obj.author}</h6>
+//             <h4>${obj.title}</h4>
+//         `;
+
+//         root.appendChild(newCard);
+//     });
+// };
+
+// const handleHover = (e, idx) => {
+//     // const lastImage = dummyData[idx].videoThumbnails.pop();
+//     // e.target.src = lastImage.url;
+// };
+
+// showUI(dummyData);
+
+
+
+// function handleSearch(event) {
+//     const query = event.target.value.toLowerCase().trim();
+//     filterAndDisplay(query);
+// }
+
+// function handleSearchButton() {
+//     const query = document.querySelector("#searchBox").value.toLowerCase().trim();
+//     filterAndDisplay(query);
+// }
+
+// function filterAndDisplay(query) {
+//     const filteredData = dummyData.filter(video =>
+//         video.title.toLowerCase().includes(query) ||
+//         video.author.toLowerCase().includes(query)
+//     );
+    
+//     showUI(filteredData); 
+// }
+
+
+
+const root = document.querySelector("main");
+const searchBox = document.querySelector("#searchBox");
+const searchResults = document.createElement("ul");
+
+searchResults.style.position = "absolute";
+searchResults.style.top = "40px";
+searchResults.style.left = "50%";
+searchResults.style.width = "600px";
+searchResults.style.backgroundColor = "#222";
+searchResults.style.color = "white";
+searchResults.style.padding = "5px";
+searchResults.style.borderRadius = "5px";
+searchResults.style.listStyle = "none";
+searchResults.style.display = "none"; // Initially hidden
+document.body.appendChild(searchResults);
+
+// Retrieve search history from localStorage
+let searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
+
+// Function to display videos
 const showUI = (list) => {
-    root.innerHTML = ""; 
-    list.forEach((obj, idx) => {
+    root.innerHTML = "";
+    if (list.length === 0) {
+        root.innerHTML = `<h3 style="color: white; text-align: center;">No results found</h3>`;
+        return;
+    }
+    list.forEach((obj) => {
         const newCard = document.createElement("div");
+        newCard.className = "card";
+        newCard.innerHTML = `
+            <img src='${obj.videoThumbnails[0].url}' width="100%">
+            <h6>${obj.author}</h6>
+            <h4>${obj.title}</h4>
+            <p>${obj.viewCountText} • ${obj.publishedText}</p>
+        `;
         newCard.addEventListener("click", () => {
             window.open(`./video.html?id=${obj.videoId}`, "_top");
         });
-        newCard.className = "card";
-        newCard.innerHTML = `
-            <img 
-                src='${obj.videoThumbnails[0].url}' 
-                width="100%" 
-                onmouseover='handleHover(event, ${idx})'
-            >
-            <h6>${obj.author}</h6>
-            <h4>${obj.title}</h4>
-        `;
-
         root.appendChild(newCard);
     });
 };
 
-const handleHover = (e, idx) => {
-    // const lastImage = dummyData[idx].videoThumbnails.pop();
-    // e.target.src = lastImage.url;
-};
-
-showUI(dummyData);
-
-
-
+// Show search suggestions (from history + matching videos)
 function handleSearch(event) {
     const query = event.target.value.toLowerCase().trim();
-    filterAndDisplay(query);
-}
-
-function handleSearchButton() {
-    const query = document.querySelector("#searchBox").value.toLowerCase().trim();
-    filterAndDisplay(query);
-}
-
-function filterAndDisplay(query) {
-    const filteredData = dummyData.filter(video =>
-        video.title.toLowerCase().includes(query) ||
-        video.author.toLowerCase().includes(query)
-    );
     
-    showUI(filteredData); 
+    if (query === "") {
+        searchResults.style.display = "none"; 
+        showUI(dummyData);
+        return;
+    }
+
+    const suggestions = [
+        ...searchHistory.filter(item => item.toLowerCase().includes(query)), // History suggestions
+        ...dummyData.filter(video => video.title.toLowerCase().includes(query)).map(v => v.title) // Video suggestions
+    ];
+
+    searchResults.innerHTML = "";
+    suggestions.forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        li.style.cursor = "pointer";
+        li.style.padding = "8px";
+        li.style.borderBottom = "1px solid #333";
+        li.addEventListener("click", () => {
+            searchBox.value = text; // Autofill search box
+            searchResults.style.display = "none";
+        });
+        searchResults.appendChild(li);
+    });
+
+    searchResults.style.display = suggestions.length ? "block" : "none";
 }
+
+// Final search when clicking the button
+function handleSearchButton() {
+    const query = searchBox.value.toLowerCase().trim();
+    
+    if (query && !searchHistory.includes(query)) {
+        searchHistory.unshift(query); // Add to history (latest at top)
+        if (searchHistory.length > 5) searchHistory.pop(); // Limit to 5 items
+        localStorage.setItem("searchHistory", JSON.stringify(searchHistory)); // Save to localStorage
+    }
+    
+    filterAndDisplay(query);
+    searchResults.style.display = "none";
+}
+
+// Display filtered videos
+function filterAndDisplay(query) {
+    if (query === "") {
+        showUI(dummyData);
+        return;
+    }
+    const filteredData = dummyData.filter(video =>
+        video.title.toLowerCase().includes(query) || video.author.toLowerCase().includes(query)
+    );
+    showUI(filteredData);
+}
+
+// Attach event listeners
+searchBox.addEventListener("input", handleSearch);
+searchBox.addEventListener("focus", () => handleSearch({ target: { value: searchBox.value } }));
+document.querySelector("button").addEventListener("click", handleSearchButton);
+
+// Load initial videos
+showUI(dummyData);
+
